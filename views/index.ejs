@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Comments Dashboard</title>
+    <style>
+        button.loadButton {
+            width: 150px;
+            height: 150px;
+            background-color: blue;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button.sortButton {
+            width: 150px;
+            height: 150px;
+            background-color: red;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #commentsSection {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div>
+            <h1>Comments Dashboard</h1>
+            <button class="loadButton">LOAD</button>
+            <button class="sortButton" id="sortComments">SORT</button>
+            <div id="commentsSection">
+                <% if (locals.comments) { %>
+                    <% comments.forEach(function(c) { %>
+                        <p><strong><%= c.user.username %> :</strong> <%= c.body %></p>
+                    <% }); %>
+                <% } else { %>
+                    <p>No comments to display.</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+    <script>
+        function orderByUsername() {
+            const section = document.getElementById('commentsSection');
+            const commentNodes = Array.from(section.children);
+            commentNodes.sort((a, b) => {
+                const nameA = a.querySelector('strong').textContent;
+                const nameB = b.querySelector('strong').textContent;
+                return nameA.localeCompare(nameB);
+            });
+            commentNodes.forEach(node => section.appendChild(node));
+        }
+
+        document.getElementById('sortComments').addEventListener('click', () => {
+            orderByUsername();
+            document.getElementById('commentsSection').style.display = 'block';
+        });
+
+        document.querySelector('.loadButton').addEventListener('click', () => {
+            document.getElementById('commentsSection').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
